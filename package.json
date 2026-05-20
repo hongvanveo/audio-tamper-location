@@ -1,0 +1,9 @@
+{
+  "name": "audio-tamper-location-workspace",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "ssh2": "^1.17.0"
+  }
+}

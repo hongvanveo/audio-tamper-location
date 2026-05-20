@@ -1,0 +1,9 @@
+Hay doc file audio-tamper-location-guide.txt truoc khi bat dau.
+
+Lab nay dung WAV PCM16 mono de minh hoa fragile watermark:
+- Tao file am thanh cover.wav.
+- Nhung chu ky tamper-location vao marked.wav.
+- Kiem tra marked.wav con nguyen ven.
+- Sua mot doan audio de tao tampered.wav.
+- Chay verify_blocks.py de tim block bi sua.
+

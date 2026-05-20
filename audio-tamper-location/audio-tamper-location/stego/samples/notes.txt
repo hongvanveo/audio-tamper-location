@@ -1,0 +1,8 @@
+Fragile tamper-location audio lab.
+
+Thu nghiem:
+1. Tao cover.wav.
+2. Nhung chu ky vao marked.wav.
+3. Sua 3.20s den 3.80s de tao tampered.wav.
+4. Chay verify_blocks.py tampered.wav de thay cac block TAMPERED.
+

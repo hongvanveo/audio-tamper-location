@@ -1,0 +1,10 @@
+node_modules/
+*.log
+__pycache__/
+*.pyc
+cover.wav
+marked.wav
+tampered.wav
+.signature_found_done
+.clean_audio_ok_done
+.tamper_localized_done
