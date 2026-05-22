@@ -107,23 +107,6 @@ Kiểm tra file đã được tạo:
 ls -l cover.wav
 ```
 
-Chạy `checkwork`:
-
-```bash
-checkwork audio-tamper-location
-```
-
-Kết quả mong đợi sau task này:
-
-```text
-Y - cover_created
-N - marked_created
-N - signature_found
-N - clean_audio_ok
-N - tampered_created
-N - tamper_localized
-```
-
 ## Task 2: Nhúng chữ ký self-marking vào audio
 
 Chạy:
@@ -144,23 +127,6 @@ Kiểm tra file:
 
 ```bash
 ls -l marked.wav
-```
-
-Chạy `checkwork`:
-
-```bash
-checkwork audio-tamper-location
-```
-
-Kết quả mong đợi:
-
-```text
-Y - cover_created
-Y - marked_created
-N - signature_found
-N - clean_audio_ok
-N - tampered_created
-N - tamper_localized
 ```
 
 ## Task 3: Kiểm tra file marked.wav còn nguyên vẹn
@@ -184,23 +150,6 @@ Kết quả mong đợi:
 ```text
 tamper-location signature found.
 No modification detected.
-```
-
-Chạy `checkwork`:
-
-```bash
-checkwork audio-tamper-location
-```
-
-Kết quả mong đợi:
-
-```text
-Y - cover_created
-Y - marked_created
-Y - signature_found
-Y - clean_audio_ok
-N - tampered_created
-N - tamper_localized
 ```
 
 ## Task 4: Tạo file audio bị chỉnh sửa
@@ -233,23 +182,6 @@ Kiểm tra file:
 ls -l tampered.wav
 ```
 
-Chạy `checkwork`:
-
-```bash
-checkwork audio-tamper-location
-```
-
-Kết quả mong đợi:
-
-```text
-Y - cover_created
-Y - marked_created
-Y - signature_found
-Y - clean_audio_ok
-Y - tampered_created
-N - tamper_localized
-```
-
 ## Task 5: Phát hiện block bị chỉnh sửa
 
 Chạy:
@@ -278,7 +210,7 @@ Possible modification detected near 00:03.18 - 00:03.81
 
 Khoảng thời gian có thể hơi rộng hơn đoạn sửa thật vì chương trình khoanh vùng theo biên block 1024 mẫu.
 
-Chạy `checkwork`:
+Sau khi hoàn thành tất cả các task, chạy `checkwork`:
 
 ```bash
 checkwork audio-tamper-location
