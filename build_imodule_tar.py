@@ -1,3 +1,4 @@
+import io
 import tarfile
 from pathlib import Path
 
@@ -21,8 +22,11 @@ def add_tree(tar, path, arcname):
         info.mode = 0o755
     else:
         info.mode = 0o644
-    with path.open("rb") as handle:
-        tar.addfile(info, handle)
+    data = path.read_bytes()
+    if path.suffix == ".sh":
+        data = data.replace(b"\r\n", b"\n")
+    info.size = len(data)
+    tar.addfile(info, io.BytesIO(data))
 
 
 def main():

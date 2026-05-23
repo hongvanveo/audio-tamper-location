@@ -1,8 +1,4 @@
 #!/bin/bash
-: <<'END'
-Pregrade script for the fragile tamper-location audio lab.
-It rebuilds grading state from the learner's current files.
-END
 
 homedir=$1
 destdir=$2
@@ -54,4 +50,3 @@ if [ -s "$workdir/.tamper_localized_done" ]; then
 else
     fail "TAMPER_LOCALIZED" "tamper localization not completed"
 fi
-
