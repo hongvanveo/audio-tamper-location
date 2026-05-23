@@ -28,17 +28,23 @@ nano embed_task.py
 python3 embed_task.py
 nano verify_task.py
 python3 verify_task.py
+python3 verify_blocks.py marked.wav sign.txt
 printf 'my tamper message\n' > message.txt
 nano tamper_task.py
 python3 tamper_task.py
 nano verify_task.py
 python3 verify_task.py
+python3 verify_blocks.py tampered.wav sign.txt --changed-only
 
 Giai thich ngan:
 - tamper-location: file tu chua du lieu kiem tra cua chinh no.
 - Fragile watermark: dau nhung rat de hong khi audio bi chinh sua.
 - Block hash: moi block co hash rieng, giup khoanh vung loi.
 - Tamper localization: khi block nao sai hash, ta doi block do sang moc thoi gian.
+
+Hai cach xem ket qua:
+- `python3 verify_task.py`: in day du tat ca block theo dang `Block N: OK` hoac `Block N: TAMPERED`.
+- `python3 verify_blocks.py tampered.wav sign.txt --changed-only`: chi in cac block bi sua va dong `Possible modification detected near ...`.
 
 Checkwork:
 - cover_created: da tao cover.wav.

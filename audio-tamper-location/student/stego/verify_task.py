@@ -21,7 +21,7 @@ from self_marking import (
 AUDIO_FILE = ""
 SIGN_FILE = ""
 BLOCK_SAMPLES = DEFAULT_BLOCK_SAMPLES
-QUIET_OK = True
+SHOW_ALL_BLOCKS = True
 
 
 def ranges(items):
@@ -77,7 +77,7 @@ def main():
         )
         ok = magic == MAGIC and version == VERSION and embedded_digest == current_digest
         if ok:
-            if not QUIET_OK:
+            if SHOW_ALL_BLOCKS:
                 print(f"Block {block_index}: OK")
         else:
             tampered.append(block_index)

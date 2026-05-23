@@ -35,16 +35,34 @@ nano embed_task.py
 python3 embed_task.py
 nano verify_task.py
 python3 verify_task.py
+python3 verify_blocks.py marked.wav sign.txt
 printf 'my tamper message\n' > message.txt
 nano tamper_task.py
 python3 tamper_task.py
 nano verify_task.py
 python3 verify_task.py
+python3 verify_blocks.py tampered.wav sign.txt --changed-only
 ```
 
 Trong `embed_task.py`, sinh vien dien ten file audio va file chu ky vao
 hai dong TODO. Trong `tamper_task.py`, sinh vien dien ten file audio va
 file message can dung de tao sai lech audio.
+
+`verify_task.py` gio in day du trang thai tung block theo dang:
+
+```text
+tamper-location signature found.
+Block 0: OK
+Block 1: OK
+Block 2: TAMPERED
+Block 3: OK
+```
+
+Neu chi muon xem cac block bi sua va moc thoi gian nghi ngo, dung:
+
+```bash
+python3 verify_blocks.py tampered.wav sign.txt --changed-only
+```
 
 Ket qua mong doi khi verify file da bi sua:
 
