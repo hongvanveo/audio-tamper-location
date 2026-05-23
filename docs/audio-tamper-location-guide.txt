@@ -1,0 +1,50 @@
+Lab: audio-tamper-location
+
+Noi dung:
+- Tao audio mau cover.wav.
+- Tao sign.txt va sua file task de nhung chu ky vao marked.wav.
+- Xac minh file chua bi sua bang sign.txt.
+- Tao message.txt va sua file task de tao tampered.wav.
+- Xac dinh block bi sua va khoang thoi gian nghi ngo.
+- Chay checkwork de kiem tra 6 muc tien do.
+
+Tep can quan tam:
+- ~/stego/generate_cover.py
+- ~/stego/embed_task.py
+- ~/stego/verify_task.py
+- ~/stego/tamper_task.py
+- ~/stego/sign.txt
+- ~/stego/message.txt
+- ~/stego/cover.wav
+- ~/stego/marked.wav
+- ~/stego/tampered.wav
+
+Cac lenh goi y:
+
+cd ~/stego
+python3 generate_cover.py --out cover.wav --seconds 5
+printf 'my signature\n' > sign.txt
+nano embed_task.py
+python3 embed_task.py
+nano verify_task.py
+python3 verify_task.py
+printf 'my tamper message\n' > message.txt
+nano tamper_task.py
+python3 tamper_task.py
+nano verify_task.py
+python3 verify_task.py
+
+Giai thich ngan:
+- tamper-location: file tu chua du lieu kiem tra cua chinh no.
+- Fragile watermark: dau nhung rat de hong khi audio bi chinh sua.
+- Block hash: moi block co hash rieng, giup khoanh vung loi.
+- Tamper localization: khi block nao sai hash, ta doi block do sang moc thoi gian.
+
+Checkwork:
+- cover_created: da tao cover.wav.
+- marked_created: da tao marked.wav.
+- signature_found: verifier tim thay chu ky trong marked.wav.
+- clean_audio_ok: marked.wav duoc xac minh la chua bi sua.
+- tampered_created: da tao tampered.wav.
+- tamper_localized: verifier khoanh vung duoc block bi sua.
+

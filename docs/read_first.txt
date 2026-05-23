@@ -1,0 +1,6 @@
+Tai lieu huong dan bai lab o:
+   file:///home/student/labtainer/trunk/labs/audio-tamper-location/docs/audio-tamper-location-guide.txt
+
+Ban co the mo file nay bang cach nhap chuot phai
+va chon "Open Link".
+
