@@ -50,4 +50,3 @@ if [ -s "$workdir/.tamper_localized_done" ]; then
 else
     fail "TAMPER_LOCALIZED" "tamper localization not completed"
 fi
-
