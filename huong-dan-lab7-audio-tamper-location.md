@@ -49,9 +49,9 @@ Các file quan trọng:
 
 ```text
 generate_cover.py
-mark_blocks.py
-verify_blocks.py
-tamper_audio.py
+embed_task.py
+verify_task.py
+tamper_task.py
 refresh_status.py
 self_marking.py
 ```
@@ -61,25 +61,29 @@ self_marking.py
 Sinh viên cần:
 
 1. Tạo file audio gốc `cover.wav`.
-2. Nhúng chữ ký self-marking theo từng block để tạo `marked.wav`.
-3. Xác minh `marked.wav` chưa bị chỉnh sửa.
-4. Tạo file `tampered.wav` bằng cách sửa một đoạn thời gian trong audio.
-5. Chạy chương trình kiểm tra để phát hiện các block bị sửa.
-6. Đọc kết quả khoanh vùng thời gian nghi ngờ.
-7. Chạy `checkwork` để đạt đủ 6 mục `Y`.
+2. Tạo file `sign.txt` chứa nội dung chữ ký.
+3. Sửa file task để điền tên file audio và file chữ ký, sau đó tạo `marked.wav`.
+4. Xác minh `marked.wav` chưa bị chỉnh sửa.
+5. Tạo file `message.txt` để điều khiển nội dung chỉnh sửa audio.
+6. Sửa file task để điền tên file message và file audio, sau đó tạo `tampered.wav`.
+7. Chạy chương trình kiểm tra để phát hiện các block bị sửa.
+8. Đọc kết quả khoanh vùng thời gian nghi ngờ.
+9. Chạy `checkwork` để đạt đủ 6 mục `Y`.
 
 ## Nội dung kỹ thuật
 
 Quy trình của lab:
 
 ```text
-cover.wav
+sign.txt + cover.wav
 -> chia audio thành các block 1024 mẫu
--> tính SHA-256 rút gọn cho payload của từng block
+-> tính hash cho payload của từng block co tron noi dung sign.txt
 -> nhúng chữ ký vào các bit LSB đầu block
 -> tạo marked.wav
--> sửa một đoạn audio để tạo tampered.wav
--> đọc lại chữ ký và tính lại hash từng block
+-> message.txt + marked.wav
+-> tạo sai lệch trên một khoảng thời gian audio
+-> tạo tampered.wav
+-> dùng lại sign.txt để tính lại hash từng block
 -> block nào sai hash thì báo TAMPERED
 -> đổi vị trí block sang mốc thời gian
 ```
@@ -91,6 +95,8 @@ cover.wav
 - `Block hash`: mỗi block có hash riêng để phát hiện vùng bị thay đổi.
 - `Tamper localization`: xác định gần đúng vị trí hoặc khoảng thời gian bị sửa.
 - `LSB`: bit ít quan trọng nhất của mẫu âm thanh, dùng để nhúng chữ ký nhỏ.
+- `sign.txt`: dữ liệu chữ ký do sinh viên tự tạo, được trộn vào quá trình ký từng block.
+- `message.txt`: thông điệp do sinh viên tự tạo, dùng để tạo mẫu sai lệch khi chỉnh sửa audio.
 
 ## Task 1: Tạo file audio gốc
 
@@ -107,43 +113,86 @@ Kiểm tra file đã được tạo:
 ls -l cover.wav
 ```
 
-## Task 2: Nhúng chữ ký self-marking vào audio
+## Task 2: Tạo file sign.txt
 
-Chạy:
+Trong terminal của lab:
 
 ```bash
-python3 mark_blocks.py cover.wav marked.wav
+cd ~/stego
+nano sign.txt
 ```
 
-Kết quả mẫu:
+Sinh viên tự nhập một nội dung chữ ký, ví dụ:
 
 ```text
-tamper-location signature embedded.
-blocks=215
-output=marked.wav
+fragile audio signature
 ```
 
-Kiểm tra file:
+Lưu file rồi kiểm tra:
 
 ```bash
+ls -l sign.txt
+cat sign.txt
+```
+
+## Task 3: Sửa file task để nhúng chữ ký self-marking vào audio
+
+Mở file:
+
+```bash
+nano embed_task.py
+```
+
+Trong file này, sửa hai dòng TODO:
+
+```python
+AUDIO_FILE = ""
+SIGN_FILE = ""
+```
+
+thành:
+
+```python
+AUDIO_FILE = "cover.wav"
+SIGN_FILE = "sign.txt"
+```
+
+Sau đó chạy:
+
+```bash
+python3 embed_task.py
 ls -l marked.wav
 ```
 
-## Task 3: Kiểm tra file marked.wav còn nguyên vẹn
+## Task 4: Kiểm tra file marked.wav còn nguyên vẹn
+
+Mở file:
+
+```bash
+nano verify_task.py
+```
+
+Trong file này, sửa hai dòng TODO:
+
+```python
+AUDIO_FILE = ""
+SIGN_FILE = ""
+```
+
+thành:
+
+```python
+AUDIO_FILE = "marked.wav"
+SIGN_FILE = "sign.txt"
+```
 
 Chạy:
 
 ```bash
-python3 verify_blocks.py marked.wav
+python3 verify_task.py
 ```
 
 Nếu file chưa bị sửa, chương trình sẽ báo chữ ký được tìm thấy và các block đều `OK`.
-
-Có thể dùng bản rút gọn để chỉ hiện phần quan trọng:
-
-```bash
-python3 verify_blocks.py marked.wav --quiet-ok
-```
 
 Kết quả mong đợi:
 
@@ -152,48 +201,83 @@ tamper-location signature found.
 No modification detected.
 ```
 
-## Task 4: Tạo file audio bị chỉnh sửa
+## Task 5: Tạo file message.txt
 
-Lab có sẵn script `tamper_audio.py` để giả lập việc chỉnh sửa một đoạn audio.
-
-Chạy:
+Trong terminal của lab:
 
 ```bash
-python3 tamper_audio.py marked.wav tampered.wav --start 3.20 --end 3.80
+cd ~/stego
+nano message.txt
 ```
 
-Ý nghĩa:
-
-- `marked.wav`: file đã có chữ ký self-marking.
-- `tampered.wav`: file đầu ra sau khi bị sửa.
-- `--start 3.20`: bắt đầu sửa tại giây 3.20.
-- `--end 3.80`: kết thúc sửa tại giây 3.80.
-
-Kết quả mẫu:
+Sinh viên tự nhập một thông điệp, ví dụ:
 
 ```text
-tampered=tampered.wav
-range=3.20-3.80s
+tamper this region
 ```
 
 Kiểm tra file:
 
 ```bash
+ls -l message.txt
+cat message.txt
+```
+
+## Task 6: Sửa file task để tạo file audio bị chỉnh sửa
+
+Mở file:
+
+```bash
+nano tamper_task.py
+```
+
+Trong file này, sửa hai dòng TODO:
+
+```python
+AUDIO_FILE = ""
+MESSAGE_FILE = ""
+```
+
+thành:
+
+```python
+AUDIO_FILE = "marked.wav"
+MESSAGE_FILE = "message.txt"
+```
+
+Sau đó chạy:
+
+```bash
+python3 tamper_task.py
 ls -l tampered.wav
 ```
 
-## Task 5: Phát hiện block bị chỉnh sửa
+## Task 7: Phát hiện block bị chỉnh sửa
+
+Mở lại file:
+
+```bash
+nano verify_task.py
+```
+
+Sửa hai dòng:
+
+```python
+AUDIO_FILE = "marked.wav"
+SIGN_FILE = "sign.txt"
+```
+
+thành:
+
+```python
+AUDIO_FILE = "tampered.wav"
+SIGN_FILE = "sign.txt"
+```
 
 Chạy:
 
 ```bash
-python3 verify_blocks.py tampered.wav
-```
-
-Hoặc dùng bản rút gọn:
-
-```bash
-python3 verify_blocks.py tampered.wav --quiet-ok
+python3 verify_task.py
 ```
 
 Kết quả mẫu:
@@ -234,10 +318,16 @@ Nếu cần chạy nhanh toàn bộ quy trình trong một lượt:
 ```bash
 cd ~/stego
 python3 generate_cover.py --out cover.wav --seconds 5
-python3 mark_blocks.py cover.wav marked.wav
-python3 verify_blocks.py marked.wav --quiet-ok
-python3 tamper_audio.py marked.wav tampered.wav --start 3.20 --end 3.80
-python3 verify_blocks.py tampered.wav --quiet-ok
+nano sign.txt
+nano embed_task.py
+python3 embed_task.py
+nano verify_task.py
+python3 verify_task.py
+nano message.txt
+nano tamper_task.py
+python3 tamper_task.py
+nano verify_task.py
+python3 verify_task.py
 checkwork audio-tamper-location
 ```
 

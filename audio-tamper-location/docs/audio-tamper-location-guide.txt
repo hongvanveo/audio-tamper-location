@@ -2,17 +2,19 @@ Lab: audio-tamper-location
 
 Noi dung:
 - Tao audio mau cover.wav.
-- Nhung chu ky fragile tamper-location vao tung block.
-- Xac minh file chua bi sua.
-- Tao file tampered.wav bang cach thay doi mot khoang thoi gian.
+- Tao sign.txt va sua file task de nhung chu ky vao marked.wav.
+- Xac minh file chua bi sua bang sign.txt.
+- Tao message.txt va sua file task de tao tampered.wav.
 - Xac dinh block bi sua va khoang thoi gian nghi ngo.
 - Chay checkwork de kiem tra 6 muc tien do.
 
 Tep can quan tam:
 - ~/stego/generate_cover.py
-- ~/stego/mark_blocks.py
-- ~/stego/verify_blocks.py
-- ~/stego/tamper_audio.py
+- ~/stego/embed_task.py
+- ~/stego/verify_task.py
+- ~/stego/tamper_task.py
+- ~/stego/sign.txt
+- ~/stego/message.txt
 - ~/stego/cover.wav
 - ~/stego/marked.wav
 - ~/stego/tampered.wav
@@ -21,10 +23,16 @@ Cac lenh goi y:
 
 cd ~/stego
 python3 generate_cover.py --out cover.wav --seconds 5
-python3 mark_blocks.py cover.wav marked.wav
-python3 verify_blocks.py marked.wav
-python3 tamper_audio.py marked.wav tampered.wav --start 3.20 --end 3.80
-python3 verify_blocks.py tampered.wav
+printf 'my signature\n' > sign.txt
+nano embed_task.py
+python3 embed_task.py
+nano verify_task.py
+python3 verify_task.py
+printf 'my tamper message\n' > message.txt
+nano tamper_task.py
+python3 tamper_task.py
+nano verify_task.py
+python3 verify_task.py
 
 Giai thich ngan:
 - tamper-location: file tu chua du lieu kiem tra cua chinh no.

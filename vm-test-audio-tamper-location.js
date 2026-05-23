@@ -116,7 +116,7 @@ async function main() {
     console.log("do lab tasks inside container");
     res = await exec(
       conn,
-      `docker exec -u ubuntu ${lab}.student.student /bin/sh -c "cd /home/ubuntu/stego && python3 generate_cover.py --out cover.wav --seconds 5 && python3 mark_blocks.py cover.wav marked.wav && python3 verify_blocks.py marked.wav --quiet-ok && python3 tamper_audio.py marked.wav tampered.wav --start 3.20 --end 3.80 && python3 verify_blocks.py tampered.wav --quiet-ok && python3 refresh_status.py && cat /home/ubuntu/.local/result/tamper_location_check.txt"`,
+      `docker exec -u ubuntu ${lab}.student.student /bin/sh -c "cd /home/ubuntu/stego && python3 generate_cover.py --out cover.wav --seconds 5 && printf 'fragile audio signature\\n' > sign.txt && perl -0pi -e 's/AUDIO_FILE = \\"\\"/AUDIO_FILE = \\"cover.wav\\"/; s/SIGN_FILE = \\"\\"/SIGN_FILE = \\"sign.txt\\"/' embed_task.py && python3 embed_task.py && cp verify_task.py verify_marked.py && perl -0pi -e 's/AUDIO_FILE = \\"\\"/AUDIO_FILE = \\"marked.wav\\"/; s/SIGN_FILE = \\"\\"/SIGN_FILE = \\"sign.txt\\"/' verify_marked.py && python3 verify_marked.py && printf 'tamper this region\\n' > message.txt && perl -0pi -e 's/AUDIO_FILE = \\"\\"/AUDIO_FILE = \\"marked.wav\\"/; s/MESSAGE_FILE = \\"\\"/MESSAGE_FILE = \\"message.txt\\"/' tamper_task.py && python3 tamper_task.py && cp verify_task.py verify_tampered.py && perl -0pi -e 's/AUDIO_FILE = \\"\\"/AUDIO_FILE = \\"tampered.wav\\"/; s/SIGN_FILE = \\"\\"/SIGN_FILE = \\"sign.txt\\"/' verify_tampered.py && python3 verify_tampered.py && python3 refresh_status.py && cat /home/ubuntu/.local/result/tamper_location_check.txt"`,
       240000
     );
     console.log(res.stdout);

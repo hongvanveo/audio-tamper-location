@@ -63,6 +63,21 @@ def digest_payload(samples, block_index, block_samples):
     return hashlib.sha256(data).digest()[:DIGEST_BYTES]
 
 
+def load_text_bytes(path):
+    data = Path(path).read_text(encoding="utf-8").strip()
+    if not data:
+        raise ValueError(f"{path} rong")
+    return data.encode("utf-8")
+
+
+def digest_payload_with_sign(samples, block_index, block_samples, sign_bytes):
+    start, end = block_bounds(block_index, block_samples)
+    payload_start = start + SIGNATURE_BITS
+    payload = samples[payload_start:end]
+    data = sign_bytes + b"\n" + payload.tobytes()
+    return hashlib.sha256(data).digest()[:DIGEST_BYTES]
+
+
 def bytes_to_bits(data):
     bits = []
     for byte in data:

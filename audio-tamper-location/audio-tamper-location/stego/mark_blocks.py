@@ -1,17 +1,7 @@
 #!/usr/bin/env python3
-import argparse
+#!/usr/bin/env python3
 
-from self_marking import (
-    DEFAULT_BLOCK_SAMPLES,
-    digest_payload,
-    embed_signature,
-    ensure_block_size,
-    full_block_count,
-    mark_result,
-    read_wav,
-    signature_bytes,
-    write_wav,
-)
+raise SystemExit("Hay dung embed_task.py cho bai lab nay.")
 
 
 def main():

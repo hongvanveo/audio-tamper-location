@@ -30,20 +30,28 @@ Luong thuc hanh:
 ```bash
 cd ~/stego
 python3 generate_cover.py --out cover.wav --seconds 5
-python3 mark_blocks.py cover.wav marked.wav
-python3 verify_blocks.py marked.wav
-python3 tamper_audio.py marked.wav tampered.wav --start 3.20 --end 3.80
-python3 verify_blocks.py tampered.wav
+printf 'my signature\n' > sign.txt
+nano embed_task.py
+python3 embed_task.py
+nano verify_task.py
+python3 verify_task.py
+printf 'my tamper message\n' > message.txt
+nano tamper_task.py
+python3 tamper_task.py
+nano verify_task.py
+python3 verify_task.py
 ```
+
+Trong `embed_task.py`, sinh vien dien ten file audio va file chu ky vao
+hai dong TODO. Trong `tamper_task.py`, sinh vien dien ten file audio va
+file message can dung de tao sai lech audio.
 
 Ket qua mong doi khi verify file da bi sua:
 
 ```text
 tamper-location signature found.
-Block 0: OK
-Block 1: OK
-Block 2: TAMPERED
-Block 3: OK
+Block 137: TAMPERED
+Block 138: TAMPERED
 Possible modification detected near 00:03.20 - 00:03.80
 ```
 
